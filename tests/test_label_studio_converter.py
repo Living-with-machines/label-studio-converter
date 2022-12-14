@@ -10,7 +10,7 @@ PUBLIC_URL = "http://specialcollections.le.ac.uk/iiif/2/p16445coll4:8897/full/73
 
 
 def test_version():
-    assert __version__ == "0.0.1"
+    assert __version__ == "0.0.2"
 
 
 def test_url_returns_bytes(url=PUBLIC_URL):

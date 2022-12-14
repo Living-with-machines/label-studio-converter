@@ -111,6 +111,10 @@ The result, since we provide the `url` to the remote image in the example above,
 
 ## Change Log
 
+### 0.0.2 (Dec 14, 2022)
+
+- Second alpha version, with extended documentation
+
 ### 0.0.1 (Dec 14, 2022)
 
 - First alpha version
