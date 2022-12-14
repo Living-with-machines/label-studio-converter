@@ -1,14 +1,14 @@
-# label-studio-converter
+# ls-converter
 
-LabelStudioConverter is a simple library to convert OCR outputs into pre-annotated data for import into [LabelStudio](https://github.com/heartexlabs/label-studio).
+LabelStudioConverter (or `ls_converter` for short) is a simple library to convert OCR outputs into pre-annotated data for import into [LabelStudio](https://github.com/heartexlabs/label-studio).
 
 Currently, we can convert directly from PyTesseract, ABBYY FineReader, and Transkribus. All that is needed is an `image` (which can be a path, a public URL, or an [Image object](https://github.com/python-pillow/Pillow)) and some `input_data` (which can be a path to a JSON).
 
 It even comes with a quick utility tool to provide the PyTesseract data if you don't have it available:
 
 ```py
-from label_studio_converter import LabelStudioConverter, Input
-from label_studio_converter.utils import url_to_tesseract_data
+from ls_converter import LabelStudioConverter, Input
+from ls_converter.utils import url_to_tesseract_data
 
 URL = "http://<URL-TO-PUBLICLY-AVAILABLE-IMAGE>"
 
@@ -25,7 +25,7 @@ converted_data = converter.convert(
 Installation of LabelStudioConverter is easily done using PIP:
 
 ```sh
-$ pip install label_studio_converter
+$ pip install ls_converter
 ...
 ```
 
@@ -34,8 +34,8 @@ $ pip install label_studio_converter
 In this example, we have a publicly available historical newspaper directory [from the University of Leicester‘s Special Collections](https://specialcollections.le.ac.uk/digital/collection/p16445coll4/id/52629/rec/1). We take the direct `URL` to the image and using the built-in `url_to_tesseract_data` function, can pass the image and the data straight into the `.convert` method. The next step is to save the resulting dictionary as a JSON file. There is a helpful `save_json` function built into the package as well. In effectively three lines of code, we have OCR parsed and created a file that we can input into Label Studio.
 
 ```py
-from label_studio_converter import LabelStudioConverter, Input
-from label_studio_converter.utils import url_to_tesseract_data, save_json
+from ls_converter import LabelStudioConverter, Input
+from ls_converter.utils import url_to_tesseract_data, save_json
 
 URL = "http://specialcollections.le.ac.uk/iiif/2/p16445coll4:8897/full/730,/0/default.jpg?page=27"
 
@@ -54,8 +54,8 @@ If you select “Optical Character Recognition” in the Labeling Setup of the p
 If you instead have an image and the resulting JSON file from running it through ABBYY FineReader, you only have to adjust the import of the data thus:
 
 ```py
-from label_studio_converter import LabelStudioConverter, Input
-from label_studio_converter.utils import load_json, save_json
+from ls_converter import LabelStudioConverter, Input
+from ls_converter.utils import load_json, save_json
 
 LOCAL_IMAGE = "abbyy-output/0212_BCL8001.jpg"
 LOCAL_JSON = "abbyy-output/0212_BCL8001.json"
@@ -88,8 +88,8 @@ Because you run the data conversion on a local file, you must specify a `url` as
 Out of the box, LabelStudioConverter comes with support for the XML files created by Transkribus, as well. In this example, similar to the ABBYY example above, we provide a local image and a remote version of the same image. and use the `load_xml_as_json` utility function to read in the Transkribus XML as JSON data.
 
 ```py
-from label_studio_converter import LabelStudioConverter, Input
-from label_studio_converter.utils import load_xml_as_json, save_json
+from ls_converter import LabelStudioConverter, Input
+from ls_converter.utils import load_xml_as_json, save_json
 
 LOCAL_IMAGE = "transkribus-output/0219_BCL8001.jpg"
 LOCAL_XML = "transkribus-output/0219_BCL8001.xml"

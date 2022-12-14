@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "label-studio-converter"
+name = "ls-converter"
 version = "0.0.1"
 description = "Creates ready-to-use Label Studio pre-populated JSON files from popular OCR formats."
 authors = ["Kalle Westerling <kalle.westerling@bl.uk>"]

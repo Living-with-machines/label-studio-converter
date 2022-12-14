@@ -1,4 +1,4 @@
-from label_studio_converter import __version__
+from ls_converter import __version__
 
 
 def test_version():
