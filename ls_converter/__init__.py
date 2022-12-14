@@ -24,11 +24,28 @@ from .utils import (
 )
 
 from PIL import Image
+from typing import Union
+
 import warnings
 
 
 class LabelStudioConverter:
-    def __init__(self, input_format=Input.ABBYY):
+    """
+    LabelStudioConverter parent converter class.
+    (Inherited by ABBYYConverter, TranskribusConverter, TesseractConverter)
+    """
+
+    def __init__(self, input_format: Input = Input.TESSERACT):
+        if not input_format:
+            raise RuntimeError("input_format must be set.")
+
+        if input_format not in [
+            Input.TESSERACT,
+            Input.ABBYY,
+            Input.TRANSKRIBUS,
+        ]:
+            warnings.warn(f"input_format {input_format} is not implemented.")
+
         self.input_format = input_format
 
     def set_converter(self):
@@ -41,21 +58,33 @@ class LabelStudioConverter:
 
         raise NoSuchConverter()
 
-    def assertion(self, input_data, image, url, **kwargs) -> True:
-        if not isinstance(image, Image.Image):
-            raise IncorrectImageFormat()
-
+    def assertion(
+        self, input_data: dict, image: Image.Image, url: str, **kwargs
+    ) -> True:
         if not isinstance(input_data, dict):
             raise IncorrectInputDataFormat()
+
+        if not isinstance(image, Image.Image):
+            raise IncorrectImageFormat()
 
         if url and not isinstance(url, str):
             raise IncorrectURLFormat()
 
+        if not len(input_data):
+            raise SyntaxError(
+                "Input data looks empty. Did you provide the correct data?"
+            )
+
         return True
 
     def convert(
-        self, image: Image.Image, input_data: dict, url=None, **kwargs
-    ):
+        self,
+        image: Union[Image.Image, str],
+        input_data: Union[dict, str],
+        url: Union[str, None] = None,
+        **kwargs,
+    ) -> dict:
+        # Start up the converter
         converter = self.set_converter()
 
         # If we get an image string, we try to open it (from URL or local).
@@ -95,6 +124,10 @@ class LabelStudioConverter:
 
 
 class ABBYYConverter(LabelStudioConverter):
+    """
+    ABBYY converter class.
+    """
+
     @classmethod
     def assertion(self, input_data, image, url, **kwargs) -> True:
         if len(input_data["layout"]["pages"]) > 1:
@@ -167,8 +200,14 @@ class ABBYYConverter(LabelStudioConverter):
 
 
 class TranskribusConverter(LabelStudioConverter):
+    """
+    Transkribus converter class.
+    """
+
     @classmethod
-    def assertion(self, input_data, image, url) -> True:
+    def assertion(
+        self, input_data: dict, image: Image.Image, url: str
+    ) -> True:
         try:
             input_data["alto"]["Layout"]["Page"]["PrintSpace"]["TextBlock"]
         except KeyError:
@@ -179,7 +218,7 @@ class TranskribusConverter(LabelStudioConverter):
         return True
 
     @classmethod
-    def convert(self, input_data: dict, image: Image.Image, url=None):
+    def convert(self, input_data: dict, image: Image.Image, url=None) -> dict:
         results, all_scores = [], []
 
         image_width, image_height = image.size
@@ -238,7 +277,7 @@ class TesseractConverter(LabelStudioConverter):
     @classmethod
     def convert(
         self, input_data: dict, image: Image.Image, url=None, **kwargs
-    ):
+    ) -> dict:
         results, all_scores = [], []
 
         image_width, image_height = image.size

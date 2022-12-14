@@ -85,6 +85,15 @@ class UnexpectedType(SyntaxError):
         super().__init__(self.message)
 
 
+class UnexpectedHTTPResponse(RuntimeError):
+    def __init__(
+        self,
+        url="",
+    ):
+        self.message = f"An unexpected response encountered: {url}"
+        super().__init__(self.message)
+
+
 class URLNotSet(Warning):
     MESSAGE = "URL should be set when converting local files. Otherwise, they will not be automatically linked to your LabelStudio entry."  # noqa
 
@@ -96,3 +105,12 @@ class URLNotSet(Warning):
 
     def __str__(self):
         return repr(self.message)
+
+
+class NotAnInteger(ValueError):
+    def __init__(
+        self,
+        val=0,
+    ):
+        self.message = f"An incorrect value was passed, expected an integer-like value: {val}"  # noqa
+        super().__init__(self.message)
