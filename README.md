@@ -1,5 +1,7 @@
 # ls-converter
 
+[![Link to DOI record](https://zenodo.org/badge/DOI/10.5281/zenodo.13986499.svg)](https://doi.org/10.5281/zenodo.13986499)
+
 LabelStudioConverter (or `ls_converter` for short) is a simple library to convert OCR outputs into pre-annotated data for import into [LabelStudio](https://github.com/heartexlabs/label-studio).
 
 Currently, we can convert directly from PyTesseract, ABBYY FineReader, and Transkribus. All that is needed is an `image` (which can be a path, a public URL, or an [Image object](https://github.com/python-pillow/Pillow)) and some `input_data` (which can be a path to a JSON).
